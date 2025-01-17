@@ -88,4 +88,7 @@ public class ShortenedURL {
         return false;
     }
 
+    public String getShortCode() { // Добавлено
+        return shortCode;
+    }
 }
