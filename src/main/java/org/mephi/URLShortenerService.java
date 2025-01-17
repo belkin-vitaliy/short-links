@@ -1,3 +1,4 @@
+package org.mephi;
 import java.awt.*;
 import java.net.URI;
 import java.util.*;

@@ -1,5 +1,9 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mephi.ShortenedURL;
+import org.mephi.URLShortenerService;
+import org.mephi.URLStorage;
+import org.mephi.URLUser;
 
 import java.util.UUID;
 
@@ -128,12 +132,12 @@ class URLShortenerServiceTest {
 
     /**
      * Проверяет удаление сокращенного URL-адреса и связанного с ним права собственности пользователя.
-     *
+     * <p>
      * Этот тест обеспечивает следующее:
      * - Сокращенный URL-адрес может быть удален из `URL-хранилища`.
      * - После удаления сокращенный URL-адрес больше не доступен в хранилище.
      * - Право собственности на удаленный сокращенный URL-адрес правильно отменено.
-     *
+     * <p>
      * Метод выполняет следующие действия:
      * - Создаётся новый `сокращённый URL` и добавляется в `URLStorage`.
      * - Сокращённый URL связывается с пользователем.

@@ -1,3 +1,4 @@
+package org.mephi;
 import lombok.Getter;
 import lombok.Setter;
 
