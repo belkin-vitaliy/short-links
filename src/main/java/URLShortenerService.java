@@ -130,7 +130,7 @@ public class URLShortenerService {
      * @param userUUID    пользовательский UUID, связанный с запросом
      * @return {@code String} представляющий сгенерированный короткий код
      */
-    private String generateShortCode(String originalURL, String userUUID) {
+    public String generateShortCode(String originalURL, String userUUID) {
         return Integer.toHexString((originalURL + userUUID).hashCode());
     }
 

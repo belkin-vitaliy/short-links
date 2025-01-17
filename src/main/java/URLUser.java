@@ -1,17 +1,16 @@
+import lombok.Getter;
+
 import java.util.HashSet;
 import java.util.Set;
 
 public class URLUser {
+    @Getter
     private final String uuid;
     private final Set<String> links;
 
     public URLUser(String uuid) {
         this.uuid = uuid;
         this.links = new HashSet<>();
-    }
-
-    public String getUuid() {
-        return uuid;
     }
 
     public void addLink(String shortCode) {
