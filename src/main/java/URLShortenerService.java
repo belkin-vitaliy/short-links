@@ -107,7 +107,7 @@ public class URLShortenerService {
      * права собственности.
      *
      * @param scanner - экземпляр {@code Scanner}, используемый для считывания пользовательского ввода, включая короткий URL-адрес,
-     * UUID пользователя и новый лимит доступа.
+     *                UUID пользователя и новый лимит доступа.
      */
     private void editAccessLimit(Scanner scanner) {
         System.out.println("Введите короткий URL-адрес, который вы хотите отредактировать:");
