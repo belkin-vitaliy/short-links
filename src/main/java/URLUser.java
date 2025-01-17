@@ -17,6 +17,10 @@ public class URLUser {
         links.add(shortCode);
     }
 
+    public void removeLink(String shortCode) {
+        links.remove(shortCode);
+    }
+
     public boolean ownsLink(String shortCode) {
         return links.contains(shortCode);
     }

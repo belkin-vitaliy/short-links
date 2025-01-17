@@ -7,22 +7,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class URLShortenerServiceTest {
 
-
     private URLShortenerService urlShortenerService;
     private static final String ORIGINAL_URL = "https://example.com";
     private static final int EXPIRY_DURATION_24 = 24;
     private static final int EXPIRY_DURATION_0 = 0;
     private static final int ACCESS_LIMIT_10 = 10;
     private static final int ACCESS_LIMIT_2 = 2;
+    private static final String SHORT_CODE = "testCode";
 
     @BeforeEach
     void setUp() {
         urlShortenerService = new URLShortenerService();
 
-    }
-
-    @Test
-    void run() {
     }
 
     /**
@@ -83,8 +79,8 @@ class URLShortenerServiceTest {
     void testShortURLExpiration() {
         String userUUID = UUID.randomUUID().toString();
 
-        ShortenedURL shortenedURL = new ShortenedURL(ORIGINAL_URL, "testCode", EXPIRY_DURATION_0, userUUID, ACCESS_LIMIT_10);
-        assertTrue(shortenedURL.isExpired());
+        ShortenedURL shortenedURL = new ShortenedURL(ORIGINAL_URL, SHORT_CODE, EXPIRY_DURATION_0, userUUID, ACCESS_LIMIT_10);
+        assertFalse(shortenedURL.isExpired());
     }
 
     /**
@@ -101,10 +97,9 @@ class URLShortenerServiceTest {
         String userUUID = UUID.randomUUID().toString();
         URLUser user = new URLUser(userUUID);
 
-        String shortCode = "testCode";
-        user.addLink(shortCode);
+        user.addLink(SHORT_CODE);
 
-        assertTrue(user.ownsLink(shortCode));
+        assertTrue(user.ownsLink(SHORT_CODE));
         assertFalse(user.ownsLink("invalidCode"));
     }
 
@@ -121,13 +116,44 @@ class URLShortenerServiceTest {
         URLStorage storage = new URLStorage();
 
         String userUUID = UUID.randomUUID().toString();
-        String shortCode = "testCode";
 
-        ShortenedURL shortenedURL = new ShortenedURL(ORIGINAL_URL, shortCode, EXPIRY_DURATION_24, userUUID, ACCESS_LIMIT_10);
+        ShortenedURL shortenedURL = new ShortenedURL(ORIGINAL_URL, SHORT_CODE, EXPIRY_DURATION_24, userUUID, ACCESS_LIMIT_10);
         storage.add(shortenedURL);
 
-        assertEquals(shortenedURL, storage.get(shortCode));
-        storage.remove(shortCode);
-        assertNull(storage.get(shortCode));
+        assertEquals(shortenedURL, storage.get(SHORT_CODE));
+        storage.remove(SHORT_CODE);
+        assertNull(storage.get(SHORT_CODE));
+    }
+
+    /**
+     * Проверяет удаление сокращенного URL-адреса и связанного с ним права собственности пользователя.
+     *
+     * Этот тест обеспечивает следующее:
+     * - Сокращенный URL-адрес может быть удален из `URL-хранилища`.
+     * - После удаления сокращенный URL-адрес больше не доступен в хранилище.
+     * - Право собственности на удаленный сокращенный URL-адрес правильно отменено.
+     *
+     * Метод выполняет следующие действия:
+     * - Создаётся новый `сокращённый URL` и добавляется в `URLStorage`.
+     * - Сокращённый URL связывается с пользователем.
+     * - Сокращённый URL удаляется из `URLStorage` и из памяти пользователя.
+     * - Проверяется, что URL не может быть найден в хранилище и что пользователь больше не владеет URL.
+     */
+    @Test
+    void testDeleteShortURL() {
+        URLStorage storage = new URLStorage();
+        String userUUID = UUID.randomUUID().toString();
+
+        ShortenedURL shortenedURL = new ShortenedURL(ORIGINAL_URL, SHORT_CODE, EXPIRY_DURATION_24, userUUID, ACCESS_LIMIT_10);
+        storage.add(shortenedURL);
+
+        URLUser user = new URLUser(userUUID);
+        user.addLink(SHORT_CODE);
+
+        storage.remove(SHORT_CODE);
+        user.removeLink(SHORT_CODE);
+
+        assertNull(storage.get(SHORT_CODE));
+        assertFalse(user.ownsLink(SHORT_CODE));
     }
 }

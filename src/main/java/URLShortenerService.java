@@ -30,7 +30,8 @@ public class URLShortenerService {
             switch (choice) {
                 case 1 -> createShortURL(scanner);
                 case 2 -> accessShortURL(scanner);
-                case 3 -> {
+                case 3 -> deleteShortURL(scanner);
+                case 4 -> {
                     System.out.println("Выходящий... До свидания!");
                     return;
                 }
@@ -95,6 +96,40 @@ public class URLShortenerService {
                 Desktop.getDesktop().browse(new URI(shortenedURL.getOriginalURL()));
             } else {
                 System.out.println("Достигнут лимит ссылок.");
+            }
+        }
+    }
+
+    /**
+     * Удаляет существующий короткий URL-адрес из хранилища после проверки прав доступа.
+     * Пользователь должен предоставить URL, который он хочет удалить,
+     * и свой UUID для подтверждения прав на удаление.
+     *
+     * @param scanner экземпляр {@code Scanner}, используемый для считывания вводимых данных,
+     *                таких как короткий URL-адрес и пользовательский UUID.
+     */
+    private void deleteShortURL(Scanner scanner) {
+        System.out.println("Введите короткий URL-адрес, который вы хотите удалить:");
+        String shortURL = scanner.nextLine();
+
+        String shortCode = shortURL.replace(BASE_URL, "");
+        ShortenedURL shortenedURL = urlStorage.get(shortCode);
+
+        if (shortenedURL == null) {
+            System.out.println("Этой ссылки не существует.");
+        } else {
+            System.out.println("Введите свой пользовательский UUID:");
+            String userUUID = scanner.nextLine();
+
+            if (!userUUID.equals(shortenedURL.getUserUUID())) {
+                System.out.println("У вас нет разрешения на удаление этой ссылки.");
+            } else {
+                urlStorage.remove(shortCode);
+                URLUser user = users.get(userUUID);
+                if (user != null) {
+                    user.removeLink(shortCode);
+                }
+                System.out.println("Ссылка была успешно удалена.");
             }
         }
     }
