@@ -23,15 +23,16 @@ public class URLShortenerService {
         System.out.println("Добро пожаловать в службу сокращения URL-адресов!");
 
         while (true) {
-            System.out.println("1. Создайте короткий URL-адрес\n2. Доступ к короткому URL-адресу\n3. Exit");
+            System.out.println("1. Создайте короткий URL-адрес\n2. Откройте короткий URL-адрес\n3. Отредактируйте ограничение доступа\n4. Удалите короткий URL-адрес\n5. Выйдите");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Настройка панели инструментов…
 
             switch (choice) {
                 case 1 -> createShortURL(scanner);
                 case 2 -> accessShortURL(scanner);
-                case 3 -> deleteShortURL(scanner);
-                case 4 -> {
+                case 3 -> editAccessLimit(scanner);
+                case 4 -> deleteShortURL(scanner);
+                case 5 -> {
                     System.out.println("Выходящий... До свидания!");
                     return;
                 }
@@ -96,6 +97,40 @@ public class URLShortenerService {
                 Desktop.getDesktop().browse(new URI(shortenedURL.getOriginalURL()));
             } else {
                 System.out.println("Достигнут лимит ссылок.");
+            }
+        }
+    }
+
+    /**
+     * Изменяет ограничение доступа для существующего сокращенного URL-адреса. Предлагает пользователю ввести короткий URL-адрес,
+     * свой UUID для аутентификации и установить новый предел доступа. Перед внесением изменений убедитесь, что у пользователя есть
+     * права собственности.
+     *
+     * @param scanner - экземпляр {@code Scanner}, используемый для считывания пользовательского ввода, включая короткий URL-адрес,
+     * UUID пользователя и новый лимит доступа.
+     */
+    private void editAccessLimit(Scanner scanner) {
+        System.out.println("Введите короткий URL-адрес, который вы хотите отредактировать:");
+        String shortURL = scanner.nextLine();
+
+        String shortCode = shortURL.replace(BASE_URL, "");
+        ShortenedURL shortenedURL = urlStorage.get(shortCode);
+
+        if (shortenedURL == null) {
+            System.out.println("Этой ссылки не существует.");
+        } else {
+            System.out.println("Введите свой пользовательский UUID:");
+            String userUUID = scanner.nextLine();
+
+            if (!userUUID.equals(shortenedURL.getUserUUID())) {
+                System.out.println("У вас нет прав на редактирование этой ссылки.");
+            } else {
+                System.out.println("Enter the new access limit:");
+                int newLimit = scanner.nextInt();
+                scanner.nextLine(); // consume newline
+
+                shortenedURL.setAccessLimit(newLimit);
+                System.out.println("Введите новый лимит доступа:");
             }
         }
     }

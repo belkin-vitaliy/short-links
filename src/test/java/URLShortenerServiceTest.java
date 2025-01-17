@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class URLShortenerServiceTest {
 
+    public static final String INVALID_CODE = "invalidCode";
     private URLShortenerService urlShortenerService;
     private static final String ORIGINAL_URL = "https://example.com";
     private static final int EXPIRY_DURATION_24 = 24;
@@ -100,7 +101,7 @@ class URLShortenerServiceTest {
         user.addLink(SHORT_CODE);
 
         assertTrue(user.ownsLink(SHORT_CODE));
-        assertFalse(user.ownsLink("invalidCode"));
+        assertFalse(user.ownsLink(INVALID_CODE));
     }
 
     /**
@@ -155,5 +156,12 @@ class URLShortenerServiceTest {
 
         assertNull(storage.get(SHORT_CODE));
         assertFalse(user.ownsLink(SHORT_CODE));
+
+        shortenedURL.setAccessLimit(20);
+        assertEquals(20, shortenedURL.getAccessLimit());
+
+        assertTrue(shortenedURL.decrementLimit());
+        assertEquals(19, shortenedURL.getAccessLimit());
+
     }
 }

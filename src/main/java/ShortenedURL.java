@@ -1,4 +1,5 @@
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.concurrent.TimeUnit;
 
@@ -9,6 +10,7 @@ import java.util.concurrent.TimeUnit;
  * управления ограничениями доступа и получения пользовательского идентификатора.
  */
 @Getter
+@Setter
 public class ShortenedURL {
 
     /**
