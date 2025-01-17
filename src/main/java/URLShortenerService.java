@@ -23,7 +23,7 @@ public class URLShortenerService {
         System.out.println("Добро пожаловать в службу сокращения URL-адресов!");
 
         while (true) {
-            System.out.println("1. Создайте короткий URL-адрес\n2. Откройте короткий URL-адрес\n3. Отредактируйте ограничение доступа\n4. Удалите короткий URL-адрес\n5. Выйдите");
+            System.out.println("1. Создайте короткий URL-адрес\n2. Откройте короткий URL-адрес\n3. Отредактируйте ограничение доступа\n4. Удалите короткий URL-адрес\n5. Выход");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Настройка панели инструментов…
 
@@ -33,7 +33,7 @@ public class URLShortenerService {
                 case 3 -> editAccessLimit(scanner);
                 case 4 -> deleteShortURL(scanner);
                 case 5 -> {
-                    System.out.println("Выходящий... До свидания!");
+                    System.out.println("До свидания!");
                     return;
                 }
                 default -> System.out.println("Неверный выбор. Пожалуйста, попробуйте снова.");
