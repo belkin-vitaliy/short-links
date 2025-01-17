@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class URLShortenerServiceTest {
 
-    public static final String INVALID_CODE = "invalidCode";
     private URLShortenerService urlShortenerService;
     private static final String ORIGINAL_URL = "https://example.com";
     private static final int EXPIRY_DURATION_24 = 24;
@@ -15,6 +14,7 @@ class URLShortenerServiceTest {
     private static final int ACCESS_LIMIT_10 = 10;
     private static final int ACCESS_LIMIT_2 = 2;
     private static final String SHORT_CODE = "testCode";
+    private static final String INVALID_CODE = "invalidCode";
 
     @BeforeEach
     void setUp() {
