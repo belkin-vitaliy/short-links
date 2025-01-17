@@ -1,4 +1,5 @@
 package org.mephi;
+
 import lombok.Getter;
 
 import java.util.HashSet;
